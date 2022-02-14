@@ -1,5 +1,4 @@
 const chalk = require("chalk");
-const COLORS = ["green", "yellow", "red"];
 
 function info(...args){
     console.log(chalk.green(...args));
