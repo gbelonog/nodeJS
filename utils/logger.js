@@ -1,16 +1,16 @@
 const chalk = require("chalk");
 const COLORS = ["green", "yellow", "red"];
 
-function info(message){
-    console.log(chalk[COLORS[0]](message));
+function info(...args){
+    console.log(chalk.green(...args));
 }
 
-function warn(message){
-    console.log(chalk[COLORS[1]](message));
+function warn(...args){
+    console.log(chalk.yellow(...args));
 }
 
-function error(message){
-    console.log(chalk[COLORS[2]](message));
+function error(...args){
+    console.log(chalk.red(...args));
 }
 
 module.exports = { info, warn, error };
