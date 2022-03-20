@@ -5,8 +5,8 @@ const EventEmitter = require('events');
 const eventEmitter = new EventEmitter();
 
 
-function seek(target = '', dirPath = '') { 
-    readdir(path.resolve(dirPath), (err, files)=>{
+async function seek(target = '', dirPath = '') { 
+    await readdir(path.resolve(dirPath), (err, files)=>{
         if(err) {
             error(err);
         } else {
