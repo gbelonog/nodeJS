@@ -1,33 +1,35 @@
-const { readdir, readFile } = require('fs');
+const { readdir, readFile } = require('fs/promises');
 const path = require('path');
 const { info, error } = require('./logger');
 const EventEmitter = require('events');
 const eventEmitter = new EventEmitter();
 const { writeToLog } = require('./loggerToFile');
+let filesInDir = [];
+let data = '';
 
-function seek(target = '', dirPath = '', verbose = false) { 
-    readdir(path.resolve(dirPath), (err, files)=>{
-        if(err) {
-            error(err);
-        } else {
-            info(`files: ${files} are in folder ${dirPath}`);
-            if(files.indexOf(target) !== -1){
+async function seek(target = '', dirPath = '', verbose = false) { 
+    try{
+        filesInDir = await readdir(dirPath);
+        info('filesInDir', filesInDir);
+    } catch (err) {
+        error(err);
+    }
+
+    if(filesInDir){
+        info(`files: ${filesInDir} are in folder ${dirPath}`);
+        if(filesInDir.indexOf(target) !== -1){   
+            try{
                 eventEmitter.emit('success', target, dirPath);
-                readFile(path.join(dirPath, target), 'utf8' , (err, data) => {
-                    if (err) {
-                      console.error(err);
-                      return
-                    }
-                    console.log(data);
-                    if(verbose) writeToLog('success', data);
-                  })
-                
-            } else {
-                eventEmitter.emit('fail', target, dirPath);
-                if(verbose) writeToLog('fail');
+                const data = await readFile(path.join(dirPath, target), 'utf8');
+                if(verbose) writeToLog('success', data);
+            } catch (err) {
+                error(err);
             }
+        } else {
+            eventEmitter.emit('fail', target, dirPath);
+            if(verbose) writeToLog('fail');
         }
-    })
+    }
 }
 
 module.exports = { seek, eventEmitter };
