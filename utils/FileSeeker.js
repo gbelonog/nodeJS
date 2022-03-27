@@ -5,8 +5,8 @@ const EventEmitter = require('events');
 const eventEmitter = new EventEmitter();
 const { writeToLog } = require('./loggerToFile');
 
-async function seek(target = '', dirPath = '', verbose = false) { 
-    await readdir(path.resolve(dirPath), (err, files)=>{
+function seek(target = '', dirPath = '', verbose = false) { 
+    readdir(path.resolve(dirPath), (err, files)=>{
         if(err) {
             error(err);
         } else {
