@@ -11,4 +11,4 @@ eventEmitter.on('fail', (target,dirPath) => {
     warn(`file ${target} is not present in folder ${dirPath}`);
 })
 
-seek(argv.file, argv.dir);
+seek(argv.file, argv.dir, argv.verbose);
