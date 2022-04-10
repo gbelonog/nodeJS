@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 }); 
 
 app.post('/form', upload.array(), function (req, res) {
-    logger.info("POST done");
+    console.log("POST done");
     let todoReader = fs.createReadStream('./todoData.json');
     todoReader.on('data', function (chunk) {
         let todo = JSON.parse(chunk.toString());
@@ -52,21 +52,13 @@ app.post('/form', upload.array(), function (req, res) {
 
 
         let todoReader = fs.createReadStream('./todoData.json');
-    todoReader.on('data', function (chunk) {
-        console.log('todoReader', chunk.toString());
+        todoReader.on('data', function (chunk) {
+        console.log('todoReader post', chunk.toString());
         let todo = JSON.parse(chunk.toString());
         let indexReader = fs.createReadStream('./index.html');
         indexReader.on('data', function (chunk) {
-            console.log('indexReader ', chunk.toString());
+            console.log('indexReader post ', chunk.toString());
             let newIndex = chunk.toString().replace('point', `${Object.values(todo)}`);
-            // let newIndex = chunk.toString()
-            // console.log('--------------', newIndex.indexOf('point'))
-            // let array = newIndex.split('');
-            // array.splice(newIndex.indexOf('point')+5, 0, JSON.stringify(todo));
-            // let t = JSON.stringify(array.join(''));
-            // console.log("~~~~~~~~~~~~~~~~~~~~~~~", t)
-            // let writer = fs.createWriteStream('./index.html', {encoding: 'utf8'});
-            // writer.write(t);
             let writer = fs.createWriteStream('./index.html', {encoding: 'utf8'});
             writer.write(newIndex);
         })
