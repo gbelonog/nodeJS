@@ -11,8 +11,7 @@ homeRouter.get('/', (req, res) => {
     });
     indexReader.on('end', async() => {
         const items = await itemData.getItem();
-        const list = items.map( e => `<li>[${e.date}] ${e.value}</li>`);
-        console.log('list', list);
+        const list = items.map( e => `<li>[${e.date}] ${e.value}</li>`).join('\n');
         template = template.replace('{%list%}', list);
         res.send(template);
     } );
@@ -33,7 +32,6 @@ homeRouter.post('/', (req, res) => {
     })
 
     req.on('end', async () => {
-        console.log(body);
         const item = body.replace('itemValue=', '');
         await itemData.setItem({
             value: item,
