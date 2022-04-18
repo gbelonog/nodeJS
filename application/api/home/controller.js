@@ -1,27 +1,28 @@
 const { Router } = require('express');
 const path = require('path');
 const fs = require('fs');
+const { itemData } = require('../../services');
 const homeRouter = Router();
-const { itemData  } = require('../../services');
-homeRouter.get('/', (req, res) => { 
+
+homeRouter.get('/', (req, res) => {
     let template = '';
-    let indexReader = fs.createReadStream(path.join(__dirname,'..','..','..','public','views','index.html'), { encoding: 'utf8' });
+    let indexReader = fs.createReadStream(path.join(__dirname, '..', '..', '..', 'public', 'views', 'index.html'), { encoding: 'utf8' });
     indexReader.on('data', (data) => {
         template += data;
     });
-    indexReader.on('end', async() => {
+    indexReader.on('end', async () => {
         const items = await itemData.getItem();
-        const list = items.map( e => `<li>[${e.date}] ${e.value}</li>`).join('\n');
+        const list = items.map(e => `<li>[${e.date}] ${e.value}</li>`).join('\n');
         template = template.replace('{%list%}', list);
         res.send(template);
-    } );
+    });
 });
 
-homeRouter.get('/index.html', (req, res) => { 
+homeRouter.get('/index.html', (req, res) => {
     res.redirect('/');
 });
 
-homeRouter.get('error', (req, res) => { 
+homeRouter.get('error', (req, res) => {
     res.status(500).send('Unexpected error');
 });
 
