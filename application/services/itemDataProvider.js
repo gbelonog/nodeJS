@@ -7,6 +7,7 @@ class ItemDataProvider {
         this.cash = null;
         this.dataFile = path.join(__dirname, '..', '..', './todoData.json');
     };
+
     async getItem() {
         logger.info('getItem');
         if (this.cash) {
