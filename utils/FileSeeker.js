@@ -7,27 +7,27 @@ const { writeToLog } = require('./loggerToFile');
 let filesInDir = [];
 let data = '';
 
-async function seek(target = '', dirPath = '', verbose = false) { 
-    try{
+async function seek(target = '', dirPath = '', verbose = false) {
+    try {
         filesInDir = await readdir(dirPath);
         info('filesInDir', filesInDir);
     } catch (err) {
         error(err);
     }
 
-    if(filesInDir){
+    if (filesInDir) {
         info(`files: ${filesInDir} are in folder ${dirPath}`);
-        if(filesInDir.indexOf(target) !== -1){   
-            try{
+        if (filesInDir.indexOf(target) !== -1) {
+            try {
                 eventEmitter.emit('success', target, dirPath);
                 const data = await readFile(path.join(dirPath, target), 'utf8');
-                if(verbose) writeToLog('success', data);
+                if (verbose) writeToLog('success', data);
             } catch (err) {
                 error(err);
             }
         } else {
             eventEmitter.emit('fail', target, dirPath);
-            if(verbose) writeToLog('fail');
+            if (verbose) writeToLog('fail');
         }
     }
 }
